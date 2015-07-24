@@ -3,9 +3,9 @@ from django.utils.translation import ugettext_lazy as _
 import horizon
 from openstack_dashboard.dashboards.mydashboard import dashboard
 
-class Mypanel(horizon.Panel):
-    name = _("Events Count")
-    slug = "mypanel"
+class Rulespanel(horizon.Panel):
+    name = _("Rulespanel")
+    slug = "rulespanel"
 
 
-dashboard.Mydashboard.register(Mypanel)
+dashboard.Mydashboard.register(Rulespanel)
