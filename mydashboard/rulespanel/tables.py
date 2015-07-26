@@ -20,13 +20,13 @@ class MyFilterAction(tables.FilterAction):
 
 class AddTableData(tables.LinkAction):
     name = "add"
-    verbose_name = _("Add Provider")
+    verbose_name = _("Add Rules")
     url = "horizon:mydashboard:rulespanel:add"
     classes = ("btn-launch", "ajax-modal")
  
 class DeleteTableData(tables.DeleteAction):
-    data_type_singular = _("Provider")
-    data_type_plural = _("Providers")
+    data_type_singular = _("Rulespanel")
+    data_type_plural = _("Rulespanel")
  
     def delete(self, request, obj_id):
         utils.deleteProvider(self, obj_id)

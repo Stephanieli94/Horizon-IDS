@@ -13,7 +13,7 @@ from horizon import exceptions
 requests.packages.urllib3.disable_warnings()
 
  
-integra_url = "https://localhost:8443/rest"
+integra_url = "https://146.118.97.140:8000/mydashboard"
 json_headers = {'Accept': 'application/json'}
  
 class Provider:
@@ -75,7 +75,7 @@ def addProvider(self, request, context):
         secured = context.get('secured')
  
         payload = {'name': name, 'description': description, 'hostname': hostname, 'port': port, 'timeout': timeout, 'secured': secured}
-        requests.post(integra_url + "/providers", json=payload, verify=False, auth=HTTPBasicAuth('admin', 'integra'), headers=json_headers)
+        requests.post(integra_url + "/rulespanel", json=payload, verify=False, auth=HTTPBasicAuth('admin', 'mydashboard'), headers=json_headers)
  
     except:
         print "Exception inside utils.addProvider"

@@ -5,7 +5,7 @@ import horizon
 class Rulegroup(horizon.PanelGroup):
     slug = "rulegroup"
     name = _("Rules")
-    panels = ('rulespanel',) #this is the path of rulesPanel folder
+    panels = ('rulespanel','snortrules') #this is the path of rulesPanel folder
 
 class Mygroup(horizon.PanelGroup):
     slug = "mygroup"
