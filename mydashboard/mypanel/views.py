@@ -6,7 +6,7 @@ from .tables import InstancesTable
 import json 
 from .CountBean import CountBean
 import subprocess 
-
+import time
 class IndexView(tables.DataTableView):
 #    tab_group_class = mydashboard_tabs.MypanelTabs
     table_class = InstancesTable
@@ -14,11 +14,12 @@ class IndexView(tables.DataTableView):
 
     def get_data(self):
 #	 subprocess.call(["ls"])
-#	 subprocess.call(["python", "../../../root/h-totcount.py"])
+	 subprocess.call(["python", "/opt/stack/h-script/totcount.py"])
 #        strobj = '[{"id": 111, "name": "emp1", "salary": 1000, "addr": "kolkata"}, {"id": 222, "name": "emp2", "salary": 5000, "addr": "bangalore"}]'
 #        strobj = '[{"id": 1, "TotCount": 11111}]'
 #	instances = json.loads(strobj)
-	 filejson = open("/opt/stack/totcount.json","r+")
+	 time.sleep(1)
+	 filejson = open("/opt/stack/h-json/totcount.json","r+")
 	 jsonfile = filejson.read()
 	  
 	 instances = json.loads(jsonfile)

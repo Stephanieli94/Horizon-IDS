@@ -7,9 +7,9 @@ from requests.auth import HTTPBasicAuth
 from django.template.defaultfilters import register
 from django.utils.translation import ugettext_lazy as _
 import requests
- 
+import json 
 from horizon import exceptions
- 
+import time
 requests.packages.urllib3.disable_warnings()
 
  
@@ -32,10 +32,16 @@ class Provider:
  
 def getProviders(self):
     try:
-        r = requests.get(integra_url + "/providers", verify=False, auth=HTTPBasicAuth('admin', 'integra'), headers=json_headers)
+#        r = requests.get(integra_url + "/providers", verify=False, auth=HTTPBasicAuth('admin', 'integra'), headers=json_headers)
+#
+	filejson = open("/opt/stack/horizon/openstack_dashboard/dashboards/mydashboard/rulespanel/rulesjson.json","r+")
  
-        providers = []
-        for provider in r.json()['providers']:
+        jsonfile = filejson.read()
+	providers= []
+        instances = json.loads(jsonfile)
+        filejson.close()
+
+        for provider in instances:
             providers.append(Provider(provider[u'id'], provider[u'name'], provider[u'description'], provider[u'hostname'], provider[u'port'], provider[u'timeout'], provider[u'secured']))
  
         return providers
@@ -73,10 +79,24 @@ def addProvider(self, request, context):
         port = context.get('port')
         timeout = context.get('timeout')
         secured = context.get('secured')
- 
-        payload = {'name': name, 'description': description, 'hostname': hostname, 'port': port, 'timeout': timeout, 'secured': secured}
-        requests.post(integra_url + "/rulespanel", json=payload, verify=False, auth=HTTPBasicAuth('admin', 'mydashboard'), headers=json_headers)
- 
+ 	ranNum = time.time()
+#this is a hard code, we suppose to use http send info to nova, and nova api should somehow give this info an id
+        payload = {'id':ranNum,'name': name, 'description': description, 'hostname': hostname, 'port': port, 'timeout': timeout, 'secured': secured}
+#        requests.post(integra_url + "/rulespanel", json=payload, verify=False, auth=HTTPBasicAuth('admin', 'mydashboard'), headers=json_headers)
+#	event_json = json.dumps(payload)
+	filejson = open("/opt/stack/horizon/openstack_dashboard/dashboards/mydashboard/rulespanel/rulesjson.json","r+")
+        json_file = '/opt/stack/horizon/openstack_dashboard/dashboards/mydashboard/rulespanel/rulesjson.json'
+#	with open(json_file, 'r') as f:
+#		json.dump([], f)	
+	jsonfile = filejson.read()
+	instances = json.loads(jsonfile)
+	
+	with open(json_file, 'w') as feedsjson:
+    		
+    		instances.append(payload)
+    		json.dump(instances, feedsjson)
+	feedsjson.close()
+	filejson.close()
     except:
         print "Exception inside utils.addProvider"
         print traceback.format_exc()

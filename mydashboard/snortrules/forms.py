@@ -25,7 +25,7 @@ class AddRuleForm():
     domain_name = forms.CharField(label=_("Domain Name"),
                                   required=False,
                                   widget=forms.HiddenInput())
-    name = forms.CharField(max_length=255, label=_("User Name"))
+   # name = forms.CharField(max_length=255, label=_("User Name"))
     Description = forms.CharField(widget=forms.widgets.Textarea(
                                   attrs={'rows': 4}),
                                   label=_("Description"),
@@ -36,10 +36,10 @@ class AddRuleForm():
     #    required=True,
     #     max_length=120,
     #    help_text=_("Description"))
-    #SignatureCount = forms.CharField(
-    #     max_length=255,
-    #     required=True,
-    #     label=_("SignatureCount")
+    SignatureCount = forms.CharField(
+      
+         required=False,
+         label=_("SignatureCount"))
     #email = forms.EmailField(
     #    label=_("Email"),
     #    required=False)
@@ -53,32 +53,11 @@ class AddRuleForm():
                                  initial=True)
 
 
-#      def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         #roles = kwargs.pop('roles')
-        #    super(AddRuleForm, self).__init__(*args, **kwargs)
-#        Reorder form fields from multiple inheritance
-#            ordering = ["domain_id", "domain_name",
-#                    "Description", "SignatureCount",
-#                    "enabled"]
+        #super(CreateUserForm, self).__init__(*args, **kwargs)
+        # Reorder form fields from multiple inheritance
+        ordering = ["domain_id", "domain_name",
+                    "Description", "SignatureCount" 
+                    "enabled"]
 
-
-#      def __init__(self, *args, **kwargs):
-#    def __init__(self, request,context):
-#        self.request = request
-#        self.context = context
-        #super(AddRuleForm, self).__init__(
-         #   request, context, *args, **kwargs)
-
-#class SetRuleDetails():
-#    action_class = AddRuleForm
-#    contributes = ("Description","SignatureCount")
-
- #    def contribute(self, data, context):
- #       if data:
- #           #context['name'] = data.get("name", "")
- #           context['Description'] = data.get("Description", "")
- #           context['SignatureCount'] = data.get("SignatureCount", "")
-            #context['port'] = data.get("port", "")
-            #context['timeout'] = data.get("timeout", "")
-            #context['secured'] = data.get("secured", "")
- #       return context
