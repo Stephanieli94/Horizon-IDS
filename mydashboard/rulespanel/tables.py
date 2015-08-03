@@ -30,6 +30,7 @@ class DeleteTableData(tables.DeleteAction):
  
     def delete(self, request, obj_id):
         utils.deleteProvider(self, obj_id)
+
  
 class FilterAction(tables.FilterAction):
     def filter(self, table, providers, filter_string):
@@ -44,31 +45,38 @@ class UpdateRow(tables.Row):
         pass
  
 class ProviderTable(tables.DataTable):
-    id = tables.Column("id",
-                          verbose_name=_("Id"))
+#    id = tables.Column("id",
+#			  verbose_name=_("id"))
+    action = tables.Column("action",
+			  verbose_name=_("Action"))    
+
+    protocal = tables.Column("protocal",
+                          verbose_name=_("Protocal"))
  
-    name = tables.Column("name",
-                          verbose_name=_("Name"))
+    sourceIP = tables.Column("sourceIP",
+                          verbose_name=_("SourceIP"))
  
+    sourcePort = tables.Column("sourcePort",
+                          verbose_name=_("SourcePort"))
+ 
+    direction = tables.Column("direction",
+                          verbose_name=_("Direction"))
+ 
+    destinationIP = tables.Column("destinationIP",
+                          verbose_name=_("DestinationIP"))
+ 
+    destinationPort = tables.Column("destinationPort",
+                          verbose_name=_("DestinationPort"))
+    
     description = tables.Column("description",
                           verbose_name=_("Description"))
- 
-    hostname = tables.Column("hostname",
-                          verbose_name=_("Hostname"))
- 
-    port = tables.Column("port",
-                          verbose_name=_("Port"))
- 
-    timeout = tables.Column("timeout",
-                          verbose_name=_("Timeout"))
- 
-    secured = tables.Column("secured",
-                          verbose_name=_("Secured"))
- 
+    priority = tables.Column("priority",
+			  verbose_name=_("Priority")) 
     class Meta:
         name = "mydashboard"
         verbose_name = _("Rulespanel")
         row_class = UpdateRow
         table_actions = (AddTableData,
+			 DeleteTableData,
                          FilterAction)
-        row_actions = (DeleteTableData,)
+        row_actions = ()

@@ -7,48 +7,69 @@ from openstack_dashboard.dashboards.mydashboard.rulespanel import utils
 
 
 class SetProviderDetailsAction(workflows.Action):
+    
+    action = forms.CharField(
+	 label=_("Action"),
+	 required=True,
+	 max_length=80,
+	 )
 
-    name = forms.CharField(
-        label=_("Name"),
+    protocal = forms.CharField(
+        label=_("Protocal"),
         required=True,
         max_length=80,
-        help_text=_("Name"))
+#	help_text=_("Protocal"))
+	)
+    sourceIP = forms.CharField(
+        label=_("SourceIP"),
+        required=True,
+        max_length=80,
+#	help_text=_("SourceIP"))
+	)
+    sourcePort = forms.CharField(
+        label=_("SourcePort"),
+        required=True,
+        max_length=80,
+#        help_text=_("SourcePort"))
+	)
+    direction = forms.CharField(
+        label=_("Direction"),
+        required=True,
+        max_length=80,
+#        help_text=_("Direction"))
+	)
+    destinationIP = forms.CharField(
+        label=_("DestinationIP"),
+        required=True,
+        max_length=80,
+#        help_text=_("DestinationIP"))
+	)
+    destinationPort = forms.CharField(
+        label=_("DestinationPort"),
+        max_length=80,
+        required=True,
+#        help_text=_("DestinationPort"))
 
+    	)
     description = forms.CharField(
         label=_("Description"),
+        max_length=80,
         required=True,
-        max_length=120,
-        help_text=_("Description"))
-
-    hostname = forms.CharField(
-        label=_("Hostname"),
+#        help_text=_("Description"))
+	)
+    priority = forms.CharField(
+        label=_("Priority"),
+        max_length=80,
         required=True,
-        max_length=120,
-        help_text=_("Hostname"))
-
-    port = forms.IntegerField(
-        label=_("Port"),
-        required=True,
-        min_value=1,
-        max_value=65535,
-        help_text=_("Port"))
-
-    timeout = forms.IntegerField(
-        label=_("Timeout"),
-        required=True,
-        min_value=1,
-        max_value=100000,
-        help_text=_("Timeout"))
-
-    secured = forms.BooleanField(
-        label=_("Secured"),
-        required=False,
-        help_text=_("Secured"))
+	)
+#        help_text=_("Priority"))
 
     class Meta:
         name = _("Details")
 
     def __init__(self, request, context, *args, **kwargs):
+               
+       
         self.request = request
         self.context = context
         super(SetProviderDetailsAction, self).__init__(
@@ -56,16 +77,19 @@ class SetProviderDetailsAction(workflows.Action):
 
 class SetProviderDetails(workflows.Step):
     action_class = SetProviderDetailsAction
-    contributes = ("name", "description", "hostname", "port", "timeout", "secured")
+    contributes = ("action","protocal", "sourceIP", "sourcePort", "direction", "destinationIP", "destinationPort","description","priority")
 
     def contribute(self, data, context):
         if data:
-            context['name'] = data.get("name", "")
+	    context['action'] = data.get("action","")
+            context['protocal'] = data.get("protocal", "")
+            context['sourceIP'] = data.get("sourceIP", "")
+            context['sourcePort'] = data.get("sourcePort", "")
+            context['direction'] = data.get("direction", "")
+            context['destinationIP'] = data.get("destinationIP", "")
+            context['destinationPort'] = data.get("destinationPort", "")
             context['description'] = data.get("description", "")
-            context['hostname'] = data.get("hostname", "")
-            context['port'] = data.get("port", "")
-            context['timeout'] = data.get("timeout", "")
-            context['secured'] = data.get("secured", "")
+            context['priority'] = data.get("priority", "")
         return context
 
 class AddProvider(workflows.Workflow):

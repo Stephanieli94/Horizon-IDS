@@ -21,15 +21,18 @@ class Provider:
     Provider data
     """
  
-    def __init__(self, id, name, description, hostname, port, timeout, secured):
+    def __init__(self, id, action, protocal , sourceIP, sourcePort, direction, destinationIP, destinationPort, description, priority):
         self.id = id
-        self.name = name
+	self.action = action
+        self.protocal = protocal
         self.description = description
-        self.hostname = hostname
-        self.port = port
-        self.timeout = timeout
-        self.secured = secured
- 
+        self.sourceIP = sourceIP
+        self.sourcePort = sourcePort
+        self.direction = direction
+        self.destinationIP = destinationIP
+ 	self.destinationPort = destinationPort
+	self.priority = priority
+
 def getProviders(self):
     try:
 #        r = requests.get(integra_url + "/providers", verify=False, auth=HTTPBasicAuth('admin', 'integra'), headers=json_headers)
@@ -42,7 +45,7 @@ def getProviders(self):
         filejson.close()
 
         for provider in instances:
-            providers.append(Provider(provider[u'id'], provider[u'name'], provider[u'description'], provider[u'hostname'], provider[u'port'], provider[u'timeout'], provider[u'secured']))
+            providers.append(Provider(provider[u'id'],provider[u'action'],provider[u'protocal'], provider[u'sourceIP'], provider[u'sourcePort'], provider[u'direction'], provider[u'destinationIP'], provider[u'destinationPort'], provider[u'description'], provider[u'priority']))
  
         return providers
  
@@ -72,16 +75,19 @@ def getProviderActions(self):
 # context - user inputs from form
 def addProvider(self, request, context):
     try:
- 
-        name = context.get('name')
+	action = context.get('action') 
+        protocal = context.get('protocal')
         description = context.get('description')
-        hostname = context.get('hostname')
-        port = context.get('port')
-        timeout = context.get('timeout')
-        secured = context.get('secured')
- 	ranNum = time.time()
+        sourceIP = context.get('sourceIP')
+        sourcePort = context.get('sourcePort')
+        direction = context.get('direction')
+        destinationIP = context.get('destinationIP')
+        destinationPort = context.get('destinationPort')
+        priority = context.get('priority')
+       
+ 	ranNum = str(time.time())
 #this is a hard code, we suppose to use http send info to nova, and nova api should somehow give this info an id
-        payload = {'id':ranNum,'name': name, 'description': description, 'hostname': hostname, 'port': port, 'timeout': timeout, 'secured': secured}
+        payload = {'id':ranNum,'action':action,'protocal': protocal, 'description': description, 'sourceIP': sourceIP, 'sourcePort': sourcePort, 'direction': direction, 'destinationIP': destinationIP , 'destinationPort' : destinationPort ,'priority':priority}
 #        requests.post(integra_url + "/rulespanel", json=payload, verify=False, auth=HTTPBasicAuth('admin', 'mydashboard'), headers=json_headers)
 #	event_json = json.dumps(payload)
 	filejson = open("/opt/stack/horizon/openstack_dashboard/dashboards/mydashboard/rulespanel/rulesjson.json","r+")
@@ -108,8 +114,23 @@ def addProvider(self, request, context):
 def deleteProvider(self, id):
     try:
  
-        requests.delete(integra_url + "/providers/" + id, verify=False, auth=HTTPBasicAuth('admin', 'integra'), headers=json_headers)
- 
+#        requests.delete(integra_url + "/providers/" + id, verify=False, auth=HTTPBasicAuth('admin', 'integra'), headers=json_headers)
+	filejson = open("/opt/stack/horizon/openstack_dashboard/dashboards/mydashboard/rulespanel/rulesjson.json","r+")
+	instances  = json.load(filejson)
+	json_file = '/opt/stack/horizon/openstack_dashboard/dashboards/mydashboard/rulespanel/rulesjson.json'
+# Iterate through the objects in the JSON and pop (remove)                      
+# the obj once we find it.                                                      
+	for i in xrange(len(instances)):
+    		if instances[i]["id"] == id:
+			print(id)
+        		instances.pop(i)
+        		break
+
+# Output the updated file with pretty JSON                                      
+        with open(json_file, 'w') as feedsjson:
+                json.dump(instances, feedsjson)
+        feedsjson.close()
+        filejson.close()
     except:
         print "Exception inside utils.deleteProvider"
         print traceback.format_exc()

@@ -1,1 +1,1 @@
-[{"description": "hahah", "secured": "false", "hostname": "your dad", "id": 1, "timeout": 2, "port": "123.1", "name": "your mum"}, {"description": "a", "secured": false, "hostname": "a", "id": 1438156594.665867, "timeout": 1, "port": 1, "name": "a"}]
+[{"priority": "8", "sourcePort": "80", "direction": "INBOUND", "destinationPort": "70", "description": "HI", "destinationIP": "111.11.1.1", "action": null, "sourceIP": "192.168.1.1", "id": "1438242100.59", "protocal": "TCP"}]
