@@ -3,7 +3,7 @@ import time
 from time import mktime
 from datetime import datetime
 from requests.auth import HTTPBasicAuth
- 
+import subprocess
 from django.template.defaultfilters import register
 from django.utils.translation import ugettext_lazy as _
 import requests
@@ -17,9 +17,6 @@ integra_url = "https://146.118.97.140:8000/mydashboard"
 json_headers = {'Accept': 'application/json'}
  
 class Provider:
-    """
-    Provider data
-    """
  
     def __init__(self, id, action, protocal , sourceIP, sourcePort, direction, destinationIP, destinationPort, description, priority):
         self.id = id
@@ -36,9 +33,15 @@ class Provider:
 def getProviders(self):
     try:
 #        r = requests.get(integra_url + "/providers", verify=False, auth=HTTPBasicAuth('admin', 'integra'), headers=json_headers)
+
 #
+
+	
+
+#        subprocess.call(["python", "opt/stack/h-script/jsonToSnort.py"])
+
 	filejson = open("/opt/stack/horizon/openstack_dashboard/dashboards/mydashboard/rulespanel/rulesjson.json","r+")
- 
+# 	filejson = open("/opt/stack/jsontorules.json","r+")
         jsonfile = filejson.read()
 	providers= []
         instances = json.loads(jsonfile)
@@ -87,7 +90,7 @@ def addProvider(self, request, context):
        
  	ranNum = str(time.time())
 #this is a hard code, we suppose to use http send info to nova, and nova api should somehow give this info an id
-        payload = {'id':ranNum,'action':action,'protocal': protocal, 'description': description, 'sourceIP': sourceIP, 'sourcePort': sourcePort, 'direction': direction, 'destinationIP': destinationIP , 'destinationPort' : destinationPort ,'priority':priority}
+        payload ={'id':ranNum,'action':action,'protocal': protocal, 'description': description, 'sourceIP': sourceIP, 'sourcePort': sourcePort, 'direction': direction, 'destinationIP': destinationIP , 'destinationPort' : destinationPort ,'priority':priority}
 #        requests.post(integra_url + "/rulespanel", json=payload, verify=False, auth=HTTPBasicAuth('admin', 'mydashboard'), headers=json_headers)
 #	event_json = json.dumps(payload)
 	filejson = open("/opt/stack/horizon/openstack_dashboard/dashboards/mydashboard/rulespanel/rulesjson.json","r+")

@@ -1,1 +1,1 @@
-[{"priority": "8", "sourcePort": "80", "direction": "INBOUND", "destinationPort": "70", "description": "HI", "destinationIP": "111.11.1.1", "action": null, "sourceIP": "192.168.1.1", "id": "1438242100.59", "protocal": "TCP"}]
+[{"priority": "a", "sourcePort": "a", "direction": "a", "destinationPort": "a", "description": "a", "destinationIP": "a", "action": "a", "sourceIP": "a", "id": "1438585898.5", "protocal": "a"}]
