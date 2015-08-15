@@ -10,12 +10,15 @@ import requests
 import json 
 from horizon import exceptions
 import time
+#import math
+import random
 requests.packages.urllib3.disable_warnings()
 
  
 integra_url = "https://146.118.97.140:8000/mydashboard"
 json_headers = {'Accept': 'application/json'}
- 
+json_file = '/opt/stack/h-json/test.json' 
+json_rules_script = '/opt/stack/h-script/jsonToSnort.py'
 class Provider:
  
     def __init__(self, id, action, protocal , sourceIP, sourcePort, direction, destinationIP, destinationPort, description, priority):
@@ -33,14 +36,14 @@ class Provider:
 def getProviders(self):
     try:
 #        r = requests.get(integra_url + "/providers", verify=False, auth=HTTPBasicAuth('admin', 'integra'), headers=json_headers)
-
+	subprocess.call(["python", json_rules_script])
 #
 
 	
 
 #        subprocess.call(["python", "opt/stack/h-script/jsonToSnort.py"])
 
-	filejson = open("/opt/stack/horizon/openstack_dashboard/dashboards/mydashboard/rulespanel/rulesjson.json","r+")
+	filejson = open(json_file,"r+")
 # 	filejson = open("/opt/stack/jsontorules.json","r+")
         jsonfile = filejson.read()
 	providers= []
@@ -76,7 +79,12 @@ def getProviderActions(self):
  
 # request - horizon environment settings
 # context - user inputs from form
+''' when user enter inputs , they will be stored in a json file 
+    which could be displayed on the dashboard  '''
 def addProvider(self, request, context):
+
+
+
     try:
 	action = context.get('action') 
         protocal = context.get('protocal')
@@ -88,13 +96,14 @@ def addProvider(self, request, context):
         destinationPort = context.get('destinationPort')
         priority = context.get('priority')
        
- 	ranNum = str(time.time())
+ 	# ranNum = str(time.time())
+	ranNum = str(random.randint(5000005, 5999999))
+
 #this is a hard code, we suppose to use http send info to nova, and nova api should somehow give this info an id
         payload ={'id':ranNum,'action':action,'protocal': protocal, 'description': description, 'sourceIP': sourceIP, 'sourcePort': sourcePort, 'direction': direction, 'destinationIP': destinationIP , 'destinationPort' : destinationPort ,'priority':priority}
 #        requests.post(integra_url + "/rulespanel", json=payload, verify=False, auth=HTTPBasicAuth('admin', 'mydashboard'), headers=json_headers)
 #	event_json = json.dumps(payload)
-	filejson = open("/opt/stack/horizon/openstack_dashboard/dashboards/mydashboard/rulespanel/rulesjson.json","r+")
-        json_file = '/opt/stack/horizon/openstack_dashboard/dashboards/mydashboard/rulespanel/rulesjson.json'
+	filejson = open(json_file,"r+")
 #	with open(json_file, 'r') as f:
 #		json.dump([], f)	
 	jsonfile = filejson.read()
@@ -106,6 +115,7 @@ def addProvider(self, request, context):
     		json.dump(instances, feedsjson)
 	feedsjson.close()
 	filejson.close()
+	subprocess.call(["python", json_rules_script])
     except:
         print "Exception inside utils.addProvider"
         print traceback.format_exc()
@@ -118,9 +128,8 @@ def deleteProvider(self, id):
     try:
  
 #        requests.delete(integra_url + "/providers/" + id, verify=False, auth=HTTPBasicAuth('admin', 'integra'), headers=json_headers)
-	filejson = open("/opt/stack/horizon/openstack_dashboard/dashboards/mydashboard/rulespanel/rulesjson.json","r+")
+	filejson = open(json_file,"r+")
 	instances  = json.load(filejson)
-	json_file = '/opt/stack/horizon/openstack_dashboard/dashboards/mydashboard/rulespanel/rulesjson.json'
 # Iterate through the objects in the JSON and pop (remove)                      
 # the obj once we find it.                                                      
 	for i in xrange(len(instances)):

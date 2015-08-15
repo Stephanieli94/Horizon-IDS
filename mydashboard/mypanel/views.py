@@ -28,7 +28,7 @@ class IndexView(tables.DataTableView):
          for inst in instances:
             #ret.append(Employee(inst['id'], inst['name'], inst['addr'], inst['salary']))
 
-           ret.append(CountBean(inst['id'],inst['TotCount']))
+           ret.append(CountBean(inst['id'],inst['totcount']))
 #	    print(Employee(inst['TotCount'])
 
 #        db = MySQLdb.connect(user='root', db='snort', passwd='password', host='localhost')

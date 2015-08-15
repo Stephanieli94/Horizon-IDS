@@ -18,51 +18,51 @@ class SetProviderDetailsAction(workflows.Action):
         label=_("Protocal"),
         required=True,
         max_length=80,
-#	help_text=_("Protocal"))
-	)
+	help_text=_("Protocal"))
+	
     sourceIP = forms.CharField(
         label=_("SourceIP"),
         required=True,
         max_length=80,
-#	help_text=_("SourceIP"))
-	)
+	help_text=_("SourceIP"))
+	
     sourcePort = forms.CharField(
         label=_("SourcePort"),
         required=True,
         max_length=80,
-#        help_text=_("SourcePort"))
-	)
+        help_text=_("SourcePort"))
+	
     direction = forms.CharField(
         label=_("Direction"),
         required=True,
         max_length=80,
-#        help_text=_("Direction"))
-	)
+        help_text=_("Direction"))
+	
     destinationIP = forms.CharField(
         label=_("DestinationIP"),
         required=True,
         max_length=80,
-#        help_text=_("DestinationIP"))
-	)
+        help_text=_("DestinationIP"))
+	
     destinationPort = forms.CharField(
         label=_("DestinationPort"),
         max_length=80,
         required=True,
-#        help_text=_("DestinationPort"))
+        help_text=_("DestinationPort"))
 
-    	)
+    	
     description = forms.CharField(
         label=_("Description"),
         max_length=80,
         required=True,
-#        help_text=_("Description"))
-	)
+        help_text=_("Description"))
+	
     priority = forms.CharField(
         label=_("Priority"),
         max_length=80,
         required=True,
-	)
-#        help_text=_("Priority"))
+	
+        help_text=_("Priority"))
 
     class Meta:
         name = _("Details")
