@@ -4,8 +4,7 @@ from horizon import exceptions, tables, workflows, forms, tabs
  
 from openstack_dashboard.dashboards.mydashboard.rulespanel.tables import ProviderTable
 from openstack_dashboard.dashboards.mydashboard.rulespanel import utils
-#from openstack_dashboard.dashboards.integra.providers.workflows.add_provider import AddProvider
-from .add_provider import AddProvider
+from openstack_dashboard.dashboards.mydashboard.rulespanel.workflow.add_provider import AddProvider
 
 class IndexView(tables.DataTableView):
     # A very simple class-based view...

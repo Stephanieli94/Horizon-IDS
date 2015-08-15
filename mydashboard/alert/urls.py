@@ -1,7 +1,7 @@
 from django.conf.urls import patterns
 from django.conf.urls import url
 
-from openstack_dashboard.dashboards.mydashboard.eventpanel.views \
+from openstack_dashboard.dashboards.mydashboard.alert.views \
     import IndexView
 
 

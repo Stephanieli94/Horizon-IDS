@@ -1,63 +1,74 @@
+# Copyright 2015 ANU Hermes Team, Jerome Wang & Stephine Lee
+#
+#    Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+
 import traceback
-import time
-from time import mktime
-from datetime import datetime
-from requests.auth import HTTPBasicAuth
 import subprocess
-from django.template.defaultfilters import register
-from django.utils.translation import ugettext_lazy as _
 import requests
 import json 
-from horizon import exceptions
-import time
-#import math
 import random
-requests.packages.urllib3.disable_warnings()
 
+from horizon import exceptions
+from requests.auth import HTTPBasicAuth
+from django.template.defaultfilters import register
+from django.utils.translation import ugettext_lazy as _
+
+from openstack_dashboard.dashboards.mydashboard.rulespanel.workflow import constants
+
+requests.packages.urllib3.disable_warnings()
  
-integra_url = "https://146.118.97.140:8000/mydashboard"
-json_headers = {'Accept': 'application/json'}
-json_file = '/opt/stack/h-json/test.json' 
-json_rules_script = '/opt/stack/h-script/jsonToSnort.py'
+#contants defination
+json_headers = constants.json_headers
+json_file = constants.json_file
+json_rules_script = constants.json_rules_script
+
+
 class Provider:
  
-    def __init__(self, id, action, protocal , sourceIP, sourcePort, direction, destinationIP, destinationPort, description, priority):
+    def __init__(self, id, action, protocal , sourceip, sourceport, direction, destinationip, destinationport, msg, priority,rev):
         self.id = id
 	self.action = action
         self.protocal = protocal
-        self.description = description
-        self.sourceIP = sourceIP
-        self.sourcePort = sourcePort
+        self.msg = msg
+        self.sourceip = sourceip
+        self.sourceport = sourceport
         self.direction = direction
-        self.destinationIP = destinationIP
- 	self.destinationPort = destinationPort
+        self.destinationip = destinationip
+ 	self.destinationport = destinationport
 	self.priority = priority
-
+	self.rev = rev
 def getProviders(self):
     try:
-#        r = requests.get(integra_url + "/providers", verify=False, auth=HTTPBasicAuth('admin', 'integra'), headers=json_headers)
-	subprocess.call(["python", json_rules_script])
-#
+# the following is for HTTP requests sending json data, currently using local file read/write,
+#subprocess call should be removed once snort are able to receive requests
 
-	
-
-#        subprocess.call(["python", "opt/stack/h-script/jsonToSnort.py"])
+#        r = requests.get(url_of_host + "/providers", verify=False, auth=HTTPBasicAuth('admin', 'integra'), headers=json_headers)
+#	subprocess.call(["python", json_rules_script])
 
 	filejson = open(json_file,"r+")
-# 	filejson = open("/opt/stack/jsontorules.json","r+")
         jsonfile = filejson.read()
 	providers= []
         instances = json.loads(jsonfile)
         filejson.close()
 
         for provider in instances:
-            providers.append(Provider(provider[u'id'],provider[u'action'],provider[u'protocal'], provider[u'sourceIP'], provider[u'sourcePort'], provider[u'direction'], provider[u'destinationIP'], provider[u'destinationPort'], provider[u'description'], provider[u'priority']))
+            providers.append(Provider(provider[u'id'],provider[u'action'],provider[u'protocal'], provider[u'sourceip'], provider[u'sourceport'], provider[u'direction'], provider[u'destinationip'], provider[u'destinationport'], provider[u'msg'], provider[u'priority'], provider[u'rev']))
  
         return providers
  
     except:
         exceptions.handle(self.request,
-                          _('Unable to get providers'))
+                          _('Unable to get rules'))
         return []
 
 
@@ -83,29 +94,23 @@ def getProviderActions(self):
     which could be displayed on the dashboard  '''
 def addProvider(self, request, context):
 
-
-
     try:
 	action = context.get('action') 
         protocal = context.get('protocal')
-        description = context.get('description')
-        sourceIP = context.get('sourceIP')
-        sourcePort = context.get('sourcePort')
+        msg = context.get('msg')
+        sourceip = context.get('sourceip')
+        sourceport = context.get('sourceport')
         direction = context.get('direction')
-        destinationIP = context.get('destinationIP')
-        destinationPort = context.get('destinationPort')
+        destinationip = context.get('destinationip')
+        destinationport = context.get('destinationport')
         priority = context.get('priority')
-       
- 	# ranNum = str(time.time())
+#currently setting ID as random number, need to be changed later 
 	ranNum = str(random.randint(5000005, 5999999))
-
-#this is a hard code, we suppose to use http send info to nova, and nova api should somehow give this info an id
-        payload ={'id':ranNum,'action':action,'protocal': protocal, 'description': description, 'sourceIP': sourceIP, 'sourcePort': sourcePort, 'direction': direction, 'destinationIP': destinationIP , 'destinationPort' : destinationPort ,'priority':priority}
+	rev = 1
+        payload ={'id':ranNum,'action':action,'protocal': protocal, 'msg': msg, 'sourceip': sourceip, 'sourcePort': sourceport, 'direction': direction, 'destinationip': destinationip , 'destinationport' : destinationport ,'priority':priority, 'rev':rev}
+#HTTP request below
 #        requests.post(integra_url + "/rulespanel", json=payload, verify=False, auth=HTTPBasicAuth('admin', 'mydashboard'), headers=json_headers)
-#	event_json = json.dumps(payload)
 	filejson = open(json_file,"r+")
-#	with open(json_file, 'r') as f:
-#		json.dump([], f)	
 	jsonfile = filejson.read()
 	instances = json.loads(jsonfile)
 	
@@ -126,7 +131,8 @@ def addProvider(self, request, context):
 # id is required for table
 def deleteProvider(self, id):
     try:
- 
+
+#HTTP request below 
 #        requests.delete(integra_url + "/providers/" + id, verify=False, auth=HTTPBasicAuth('admin', 'integra'), headers=json_headers)
 	filejson = open(json_file,"r+")
 	instances  = json.load(filejson)

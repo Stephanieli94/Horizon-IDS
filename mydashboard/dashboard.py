@@ -10,7 +10,7 @@ class Rulegroup(horizon.PanelGroup):
 class Mygroup(horizon.PanelGroup):
     slug = "mygroup"
     name = _("Report")
-    panels = ('mypanel','eventpanel',)
+    panels = ('mypanel','alert')
 
 
 class Mydashboard(horizon.Dashboard):

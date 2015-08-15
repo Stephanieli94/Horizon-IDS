@@ -4,7 +4,7 @@ import horizon
 from openstack_dashboard.dashboards.mydashboard import dashboard
 
 class Rulespanel(horizon.Panel):
-    name = _("Rulespanel")
+    name = _("Rules")
     slug = "rulespanel"
 
 

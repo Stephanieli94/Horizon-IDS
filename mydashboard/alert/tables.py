@@ -7,11 +7,8 @@ class MyFilterAction(tables.FilterAction):
 
 class InstancesTable(tables.DataTable):
     name = tables.Column("IPSource",
-                         verbose_name=_("IPSource"))
-    signaturecount = tables.Column("SignatureCount",verbose_name=_("SignatureCount"))
-    #salary = tables.Column("salary", verbose_name=_("Salary in Rs"))
-    #addr = tables.Column("addr",
-    #                    verbose_name=_("Address"))
+                         verbose_name=_("IP Source"))
+    signaturecount = tables.Column("SignatureCount",verbose_name=_("Signature Count"))
  
     class Meta:
         name = "emptable"

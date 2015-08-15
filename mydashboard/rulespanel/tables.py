@@ -55,22 +55,22 @@ class ProviderTable(tables.DataTable):
     protocal = tables.Column("protocal",
                           verbose_name=_("Protocal"))
  
-    sourceIP = tables.Column("sourceIP",
+    sourceip = tables.Column("sourceip",
                           verbose_name=_("SourceIP"))
  
-    sourcePort = tables.Column("sourcePort",
+    sourceport = tables.Column("sourceport",
                           verbose_name=_("SourcePort"))
  
     direction = tables.Column("direction",
                           verbose_name=_("Direction"))
  
-    destinationIP = tables.Column("destinationIP",
+    destinationip = tables.Column("destinationip",
                           verbose_name=_("DestinationIP"))
  
-    destinationPort = tables.Column("destinationPort",
+    destinationport = tables.Column("destinationport",
                           verbose_name=_("DestinationPort"))
     
-    description = tables.Column("description",
+    msg = tables.Column("msg",
                           verbose_name=_("Description"))
     priority = tables.Column("priority",
 			  verbose_name=_("Priority")) 
