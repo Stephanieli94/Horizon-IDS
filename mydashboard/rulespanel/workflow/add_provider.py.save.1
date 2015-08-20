@@ -1,132 +1,81 @@
-
 import traceback
-import socket
-from django.core.exceptions import ValidationError
+
 from horizon import workflows, forms, exceptions
 from django.utils.translation import ugettext_lazy as _
-from django.core import validators
+
 from openstack_dashboard.dashboards.mydashboard.rulespanel import utils
 
 
 class SetProviderDetailsAction(workflows.Action):
-   def validate_port(value):
-       try:
-            value == ('any')
-            int(value)>1 and  int(value)<65535 
-            return value
-       except ValueError :
-           raise ValidationError(' not an valid  number' )  
-   
-   def validate_ip(address):
-        parts=address.split(".")
-        if address == ('any'):
-           return address
-        elif len(parts)<4 or len(parts)>4:
-            raise ValidationError('invalid IP length should be 4 not greater or less than 4')
-        else:
-            while len(parts)== 4:
-                a=int(parts[0])
-                b=int(parts[1])
-                c=int(parts[2])
-                d=int(parts[3])
-                if a<= 0 or a == 127 :
-                    raise ValidationError('invalid IP address')
-                elif d == 0:
-                    raise ValidationError('host id  should not be 0 or less than zero') 
-                elif a>=255:
-                    raise ValidationError ('should not be 255 or greater than 255 or less than 0 A')
-                elif b>=255 or b<0: 
-                    raise ValidationError('should not be 255 or greater than 255 or less than 0 B')
-                elif c>=255 or c<0:
-                    raise ValidationError ('should not be 255 or greater than 255 or less than 0 C')
-                elif d>=255 or c<0:
-                    raise ValidationError('should not be 255 or greater than 255 or less than 0 D')
-                else:
-                    return address
-
-
-   action = forms.ChoiceField(
+    
+    action = forms.CharField(
 	 label=_("Action"),
 	 required=True,
-	 #max_length=80,
-         choices = [('alert',_('alert')),('log',_('log')),('pass',_('pass')),('activate',_('activate'))],
+	 max_length=80,
 	 )
 
-   protocal = forms.ChoiceField(
+    protocal = forms.ChoiceField(
         label=_("Protocal"),
         required=True,
-#       max_length=80,
-        choices = [('tcp',_('tcp')),('udp',_('udp')),('icmp',_('icmp')),('ip.',_('ip.'))],
+        #max_length=80,
+        choices = [('tcp',_('tcp')),('udp',_('udp'))],
 	help_text=_("Protocal"))
 	
-   sourceip = forms.CharField(
+    sourceip = forms.CharField(
         label=_("SourceIP"),
         required=True,
         max_length=80,
-        validators = [validate_ip],
 	help_text=_("SourceIP"))
 	
-   sourceport = forms.CharField(
+    sourceport = forms.CharField(
         label=_("SourcePort"),
         required=True,
         max_length=80,
-        validators = [validate_port],
         help_text=_("SourcePort"))
-    	
-   direction = forms.ChoiceField(
+	
+    direction = forms.CharField(
         label=_("Direction"),
         required=True,
-        #max_length=80,
-        choices = [('->',_('->'))],
+        max_length=80,
         help_text=_("Direction"))
 	
-   destinationip = forms.CharField(
+    destinationip = forms.CharField(
         label=_("DestinationIP"),
         required=True,
         max_length=80,
-        validators = [validate_ip],
         help_text=_("DestinationIP"))
 	
-   destinationport = forms.CharField(
+    destinationport = forms.CharField(
         label=_("DestinationPort"),
         max_length=80,
         required=True,
-        validators = [validate_port],
         help_text=_("DestinationPort"))
 
     	
-   msg = forms.CharField(
+    msg = forms.CharField(
         label=_("Description"),
         max_length=80,
         required=True,
         help_text=_("Description"))
 	
-   priority = forms.ChoiceField(
+    priority = forms.ChoiceField(
         label=_("Priority"),
      #   max_length=80,
         required=True,
-	choices = [('1',_('1')),('2',_('2')),('3',_('3')),('4',_('4')),('5',_('5')),('6',_('6')),('7',_('7')),('8',_('8')),('9',_('9')),('10',_('10'))],
+	choices = [('1',_('1')),('2',_('2'))],
         help_text=_("Priority"))
-  
-   
-   
-   class Meta:
-        name = _("Details")
-     
-       
 
-   def __init__(self, request, context, *args, **kwargs):
+    class Meta:
+        name = _("Details")
+
+    def __init__(self, request, context, *args, **kwargs):
                
        
         self.request = request
         self.context = context
         super(SetProviderDetailsAction, self).__init__(
             request, context, *args, **kwargs)
-        
-#        if sourceip.match(r'^((\d{1,2}|1\d{2}|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d{2}|2[0-4]\d|25[0-5])$', ip):  
-#           print "Valid IP" 
-#        else:
-#           print "Invalid IP"    
+
 class SetProviderDetails(workflows.Step):
     action_class = SetProviderDetailsAction
     contributes = ("action","protocal", "sourceip", "sourceport", "direction", "destinationip", "destinationport","msg","priority")

@@ -107,7 +107,7 @@ def addProvider(self, request, context):
 #currently setting ID as random number, need to be changed later 
 	ranNum = str(random.randint(5000005, 5999999))
 	rev = 1
-        payload ={'id':ranNum,'action':action,'protocal': protocal, 'msg': msg, 'sourceip': sourceip, 'sourcePort': sourceport, 'direction': direction, 'destinationip': destinationip , 'destinationport' : destinationport ,'priority':priority, 'rev':rev}
+        payload ={'id':ranNum,'action':action,'protocal': protocal, 'msg': msg, 'sourceip': sourceip, 'sourceport': sourceport, 'direction': direction, 'destinationip': destinationip , 'destinationport' : destinationport ,'priority':priority, 'rev':rev}
 #HTTP request below
 #        requests.post(integra_url + "/rulespanel", json=payload, verify=False, auth=HTTPBasicAuth('admin', 'mydashboard'), headers=json_headers)
 	filejson = open(json_file,"r+")

@@ -19,10 +19,11 @@ class SetProviderDetailsAction(workflows.Action):
    
    def validate_ip(address):
         parts=address.split(".")
-        if address == ('any'):
-           return address
-        elif len(parts)<4 or len(parts)>4:
-            raise ValidationError('invalid IP length should be 4 not greater or less than 4')
+        
+        if: address == ('any'):
+            return address
+        elif:  len(parts)<4 or len(parts)>4:
+            raise ValidationError('invalid IP address')
         else:
             while len(parts)== 4:
                 a=int(parts[0])
