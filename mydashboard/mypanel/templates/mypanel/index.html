@@ -1,17 +1,24 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %}{% trans "Mypanel" %}{% endblock %}
+{% block title %}{% trans "mypanel" %}{% endblock %}
 
 {% block page_header %}
-  {% include "horizon/common/_page_header.html" with title=_("Mypanel") %}
+  {% include "horizon/common/_page_header.html" with title=_("AlertDashboard") %}
 {% endblock page_header %}
 
 {% block main %}
-<div class="row">
-   <div class="col-sm-12">
-   {{ table.render }}
-   </div>
-</div>
+
+    <div id = "instances1">
+        {{ instances1_table.render }}
+     </div>
+
+   <div id="instances2"> 
+      {{ instances2_table.render}}
+    </div>
+
+   <div id="instances3">
+      {{ instances3_table.render}}
+    </div>
 {% endblock %}
 
 
